@@ -46,14 +46,12 @@
 }
 
 - (void)dealloc {
-	
 	if (_privateContext) {
 		[[NSNotificationCenter defaultCenter] removeObserver:self
                                                         name:NSManagedObjectContextDidSaveNotification
                                                       object:_privateContext
 		 ];
 	}
-    
 }
 
 #pragma mark - Public Methods
@@ -66,7 +64,6 @@
 
 - (void)main {
     @autoreleasepool {
-        
         if ([self isCancelled] && _failure) {
             _failure();
             return;
@@ -106,13 +103,9 @@
 }
 
 - (NSManagedObjectContext *)privateContext {
-    
-	if( !_privateContext ){
-		
+	if (!_privateContext) {
 		NSAssert([self mainContext], @"No Main context set in %@, cannot create private context!", self);
-        
 		_privateContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        
         [_privateContext performBlockAndWait: ^{
             [_privateContext setPersistentStoreCoordinator:[[self mainContext] persistentStoreCoordinator]];
         }];
